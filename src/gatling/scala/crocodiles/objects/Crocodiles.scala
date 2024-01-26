@@ -26,7 +26,6 @@ object Crocodiles {
   )
 
   val sentHeadersNewCrocodiles = Map(
-    "Authorization" -> "Bearer ${access_token}",
     "Content-Type" -> "application/json",
     "X-Dynatrace-Test" -> "VU=$VU;SI=GATLING;TSN=NEW-CROCODILES;LSN=$LSN;LTN=$LTN;PC=$PC"
   )
