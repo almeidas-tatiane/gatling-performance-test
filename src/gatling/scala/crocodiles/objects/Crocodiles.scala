@@ -20,9 +20,15 @@ object Crocodiles {
     "X-Dynatrace-Test" -> "VU=$VU;SI=GATLING;TSN=SEARCH-ALL-CROCODILES;LSN=$LSN;LTN=$LTN;PC=$PC"
   )
 
+  val sentHeadersNewCrocodiles = Map(
+    "Authorization" -> "Bearer ${access_token}",
+    "Content-Type" -> "application/json",
+    "X-Dynatrace-Test" -> "VU=$VU;SI=GATLING;TSN=NEW-CROCODILES;LSN=$LSN;LTN=$LTN;PC=$PC"
+  )
+
   /* ----- REQUESTS BODY ----- */
   val createNewCrocodileBody =
-    """s{
+    """{
       |      "name": "${name}" ,
       |      "sex": "${sex}" ,
       |      "date_of_birth": "${date_of_birth}"
