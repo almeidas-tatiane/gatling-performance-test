@@ -31,19 +31,7 @@ class CrocodilesSimulation extends Simulation {
       rampUsers(users).during(rampDuration),
       nothingFor(holdDuration),
       rampUsers(users).during(rampDuration),
-      nothingFor(holdDuration),
-      rampUsers(users).during(rampDuration),
-      nothingFor(holdDuration),
-      rampUsers(users).during(rampDuration),
-      nothingFor(holdDuration),
-      rampUsers(users).during(rampDuration),
-      nothingFor(holdDuration),
-      rampUsers(users).during(rampDuration),
-      nothingFor(holdDuration),
-      rampUsers(users).during(rampDuration),
-      nothingFor(holdDuration),
-      rampUsers(users).during(rampDuration),
-      nothingFor(holdDuration * 2)
+      nothingFor(holdDuration * 2),
     ).protocols(httpConfiguration)).maxDuration(maxDuration))
 
 
