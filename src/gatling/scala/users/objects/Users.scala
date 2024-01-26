@@ -24,7 +24,7 @@ object Users {
 
   /* ----- REQUESTS BODY ----- */
   val createUserBody =
-    """{
+    """s{
     |  "username": "${username}",
     |  "first_name": "${first_name}",
     |  "last_name": "${last_name}",
@@ -34,7 +34,7 @@ object Users {
 
 
   val loginBody =
-    """{
+    """s{
       |  "username": "${username}",
       |  "password": "${password}"
       |}""".stripMargin
