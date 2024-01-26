@@ -17,7 +17,7 @@ object Crocodiles {
   val createCrocodiles = csv(testDataDir + "newcrocodiles.csv").queue
 
   private val testDataDirUsers = "csv/users/"
-  val usersData = csv(testDataDirUsers + "users.csv").queue
+  val usersDataLogin = csv(testDataDirUsers + "users.csv").queue
 
   /* ----- HEADERS ----- */
   val sentHeadersAll = Map(
@@ -64,7 +64,7 @@ object Crocodiles {
   }
 
   def createNewCrocodile: ChainBuilder = {
-    feed(createCrocodiles).feed(usersData)
+    feed(createCrocodiles).feed(usersDataLogin)
     .exec(Users.login)
     .exec(
         http("Create New Crocodiles -> /my/crocodiles/")
