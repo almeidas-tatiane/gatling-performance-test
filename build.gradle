@@ -6,7 +6,7 @@ plugins {
 
 gatling {
   // WARNING: options below only work when logback config file isn't provided
-  logLevel = 'ALL' // logback root level
+  logLevel = '${LOGLEVEL}' // logback root level
   logHttp = 'FAILURES' // set to 'ALL' for all HTTP traffic in TRACE, 'FAILURES' for failed HTTP traffic in DEBUG
   enterprise {
     // Enterprise Cloud (https://cloud.gatling.io/) configuration reference: https://gatling.io/docs/gatling/reference/current/extensions/gradle_plugin/#working-with-gatling-enterprise-cloud
