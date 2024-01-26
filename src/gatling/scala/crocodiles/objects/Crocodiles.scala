@@ -62,7 +62,9 @@ object Crocodiles {
     feed(createCrocodiles)
     .exec(Users.login)
     .exec(session => {
+        session.set("createNewCrocodileBody", createNewCrocodileBody)
         println(s"Request Body: ${session("createNewCrocodileBody").as[String]}")
+        session.set("sentHeadersNewCrocodiles", sentHeadersNewCrocodiles)
         println(s"Headers: ${sentHeadersNewCrocodiles}")
         session
     })
@@ -72,10 +74,6 @@ object Crocodiles {
           .headers(sentHeadersNewCrocodiles)
           .body(StringBody(createNewCrocodileBody)).asJson
       )
-    .exec(session => {
-        println(s"Response Body: ${session("responseBody").as[String]}")
-        session
-    })
   }
 
 
