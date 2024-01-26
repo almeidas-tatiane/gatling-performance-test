@@ -11,6 +11,7 @@ object Crocodiles {
   /* ----- TEST DATA ----- */
   private val testDataDir = "csv/crocodiles/"
   val searchCrocodiles = csv(testDataDir + "crocodiles.csv").circular
+  val createCrocodiles = csv(testDataDir + "newcrocodiles.csv").queue
 
   /* ----- HEADERS ----- */
   val sentHeadersAll = Map(
@@ -31,6 +32,15 @@ object Crocodiles {
     feed(searchCrocodiles)
       .exec(
         http("Get Crocodiles By ID -> /public/crocodiles/id")
+          .get(UrlProperties.getUrlByKey("api") + "/public/crocodiles/${id}")
+          .headers(sentHeadersAll)
+      )
+  }
+
+  def createNewCrocodile: ChainBuilder = {
+    feed(createCrocodiles)
+      .exec(
+        http("Create New Crocodiles -> /public/crocodiles/id")
           .get(UrlProperties.getUrlByKey("api") + "/public/crocodiles/${id}")
           .headers(sentHeadersAll)
       )
