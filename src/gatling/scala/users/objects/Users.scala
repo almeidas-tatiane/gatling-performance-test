@@ -35,8 +35,8 @@ object Users {
 
   val loginBody =
     """{
-      |  "username": "${username}",
-      |  "password": "${password}"
+      |  "username": "test524",
+      |  "password": "test123"
       |}""".stripMargin
 
   /* ----- REQUESTS ----- */
@@ -52,8 +52,7 @@ object Users {
   }
 
   def login: ChainBuilder = {
-    feed(usersData)
-    .exec(
+    exec(
       http("Login -> /auth/token/login/")
         .post(UrlProperties.getUrlByKey("api") + "/auth/token/login/")
         .headers(sentHeadersLogin)
