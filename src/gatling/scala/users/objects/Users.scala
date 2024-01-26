@@ -25,18 +25,18 @@ object Users {
   /* ----- REQUESTS BODY ----- */
   val createUserBody =
     """{
-    |  "username": "${username}",
-    |  "first_name": "${first_name}",
-    |  "last_name": "${last_name}",
-    |  "email": "${email}",
-    |  "password": "${password}"
+    |  "username": ${username},
+    |  "first_name": ${first_name},
+    |  "last_name": ${last_name},
+    |  "email": ${email},
+    |  "password": ${password}
     |  }""".stripMargin
 
 
   val loginBody =
     """{
-      |  "username": "${username}",
-      |  "password": "${password}"
+      |  "username": ${username},
+      |  "password": ${password}
       |}""".stripMargin
 
   /* ----- REQUESTS ----- */
