@@ -9,24 +9,26 @@ class CrocodilesSimulation extends Simulation {
 
   /* ----- VARIABLES ----- */
   val httpConfiguration = http
-  val users = System.getProperty("users", "15").toInt
-  val rampDuration = System.getProperty("rampDuration", "120").toInt.seconds
-  val holdDuration = System.getProperty("holdDuration", "10").toInt.minutes
-  val maxDuration = System.getProperty("maxDuration", "130").toInt.minutes
+//  val users = System.getProperty("users", "15").toInt
+//  val rampDuration = System.getProperty("rampDuration", "120").toInt.seconds
+//  val holdDuration = System.getProperty("holdDuration", "10").toInt.minutes
+//  val maxDuration = System.getProperty("maxDuration", "130").toInt.minutes
 
   def scnGetAllCrocodiles = scenario("Get All Crocodiles")
-      .exec(Crocodiles.getAllCrocodiles)
+    .repeat(5){
+      exec(Crocodiles.getAllCrocodiles)
+    }
 
   /* ----- VALIDATE TEST ----- */
-//  setUp(scnGetAllCrocodiles.inject(
-//    atOnceUsers(1))).protocols(httpConfiguration)
+  setUp(scnGetAllCrocodiles.inject(
+    atOnceUsers(1))).protocols(httpConfiguration)
 
   /* ----- LOAD TEST ----- */
-  setUp(
-    scnGetAllCrocodiles.inject(
-      rampUsers(users).during(rampDuration),
-      nothingFor(holdDuration),
-    ).protocols(httpConfiguration)).maxDuration(maxDuration)
+//  setUp(
+//    scnGetAllCrocodiles.inject(
+//      rampUsers(users).during(rampDuration),
+//      nothingFor(holdDuration),
+//    ).protocols(httpConfiguration)).maxDuration(maxDuration)
 
 
 }
