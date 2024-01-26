@@ -9,7 +9,7 @@ object Users {
 
   /* ----- TEST DATA ----- */
   private val testDataDir = "csv/users/"
-  val usersData = csv(testDataDir + "users.csv").queue
+  val usersData = csv(testDataDir + "login.csv").queue
 
   /* ----- HEADERS ----- */
   val sentHeadersLogin = Map(
