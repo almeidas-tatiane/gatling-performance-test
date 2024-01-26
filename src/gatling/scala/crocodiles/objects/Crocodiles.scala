@@ -20,6 +20,11 @@ object Crocodiles {
     "X-Dynatrace-Test" -> "VU=$VU;SI=GATLING;TSN=SEARCH-ALL-CROCODILES;LSN=$LSN;LTN=$LTN;PC=$PC"
   )
 
+  val sentHeadersByID = Map(
+    "Content-Type" -> "application/json",
+    "X-Dynatrace-Test" -> "VU=$VU;SI=GATLING;TSN=SEARCH-CROCODILES-BYID;LSN=$LSN;LTN=$LTN;PC=$PC"
+  )
+
   val sentHeadersNewCrocodiles = Map(
     "Authorization" -> "Bearer ${access_token}",
     "Content-Type" -> "application/json",
@@ -49,17 +54,17 @@ object Crocodiles {
       .exec(
         http("Get Crocodiles By ID -> /public/crocodiles/id")
           .get(UrlProperties.getUrlByKey("api") + "/public/crocodiles/${id}")
-          .headers(sentHeadersAll)
+          .headers(sentHeadersByID)
       )
   }
 
   def createNewCrocodile: ChainBuilder = {
     feed(createCrocodiles)
     .exec(Users.login)
-      exec(
+    .exec(
         http("Create New Crocodiles -> /my/crocodiles/")
           .post(UrlProperties.getUrlByKey("api") + "/my/crocodiles/")
-          .headers(sentHeadersAll)
+          .headers(sentHeadersNewCrocodiles)
           .body(StringBody(createNewCrocodileBody)).asJson
       )
   }
