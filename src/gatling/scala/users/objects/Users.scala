@@ -25,11 +25,11 @@ object Users {
   /* ----- REQUESTS BODY ----- */
   val createUserBody =
     """{
-    |  "username" -> "test524",
-    |  "first_name" -> "Test524",
-    |  "last_name" -> "Crocodile524",
-    |  "email" -> "test524.crocodile@test.com",
-    |  "password" -> "test123"
+    |  "username": "test524",
+    |  "first_name": "Test524",
+    |  "last_name": "Crocodile524",
+    |  "email": "test524.crocodile@test.com",
+    |  "password": "test123"
     |  }""".stripMargin
 
 
