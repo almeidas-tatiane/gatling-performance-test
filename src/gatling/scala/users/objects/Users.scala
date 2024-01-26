@@ -8,8 +8,8 @@ import io.gatling.core.structure.ChainBuilder
 object Users {
 
   /* ----- TEST DATA ----- */
-  private val testDataDir = "csv/users/"
-  val usersData = csv(testDataDir + "users.csv").queue
+//  private val testDataDir = "csv/users/"
+//  val usersData = csv(testDataDir + "users.csv").queue
 
   /* ----- HEADERS ----- */
   val sentHeadersLogin = Map(
@@ -25,27 +25,27 @@ object Users {
   /* ----- REQUESTS ----- */
 
   def createNewUser: ChainBuilder = {
-    feed(usersData)
+//    feed(usersData)
     .exec(
       http("Create User -> /user/register/")
         .post(UrlProperties.getUrlByKey("api") + "/user/register/")
         .headers(sentHeadersUsers)
-        .formParam("username", "${username}")
-        .formParam("first_name", "${first_name}")
-        .formParam("last_name", "${last_name}")
-        .formParam("email", "${email}")
-        .formParam("password", "${password}")
+        .formParam("username", "test524")
+        .formParam("first_name", "Test524")
+        .formParam("last_name", "Crocodile524")
+        .formParam("email", "test524.crocodile@test.com")
+        .formParam("password", "test123")
     )
   }
 
   def login: ChainBuilder = {
-    feed(usersData)
+//    feed(usersData)
     .exec(
       http("Login -> /auth/token/login/")
         .post(UrlProperties.getUrlByKey("api") + "/auth/token/login/")
         .headers(sentHeadersLogin)
-        .formParam("username", "${username}")
-        .formParam("password", "${password}")
+        .formParam("username", "test524")
+        .formParam("password", "test123")
         .check(jsonPath("$.access").saveAs("access_token"))
     )
   }
