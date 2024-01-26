@@ -31,7 +31,7 @@ object Crocodiles {
     feed(searchCrocodiles)
       .exec(
         http("Get All Crocodiles -> /public/crocodiles/")
-          .get(UrlProperties.getUrlByKey("api") + "/public/crocodiles/$id")
+          .get(UrlProperties.getUrlByKey("api") + "/public/crocodiles/${id}")
           .headers(sentHeadersAll)
       )
   }
