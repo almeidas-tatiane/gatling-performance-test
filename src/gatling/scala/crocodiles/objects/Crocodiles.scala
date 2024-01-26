@@ -16,8 +16,8 @@ object Crocodiles {
   val searchCrocodiles = csv(testDataDir + "crocodiles.csv").circular
   val createCrocodiles = csv(testDataDir + "newcrocodiles.csv").queue
 
-  private val testDataDir = "csv/users/"
-  val usersData = csv(testDataDir + "users.csv").queue
+  private val testDataDirUsers = "csv/users/"
+  val usersData = csv(testDataDirUsers + "users.csv").queue
 
   /* ----- HEADERS ----- */
   val sentHeadersAll = Map(
