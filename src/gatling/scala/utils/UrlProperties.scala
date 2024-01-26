@@ -6,9 +6,11 @@ import scala.io.Source
 object UrlProperties {
   private var properties : Properties = null
 
-  private val propertiesFile = getClass.getResource("application.properties")
+//  private val propertiesFile = getClass.getResource("application.properties")
 
   def urls(property: String): String = {
+    val propertiesFile = getClass.getResource("application.properties")
+
     if (propertiesFile != null) {
       val source = Source.fromURL(propertiesFile)
 
