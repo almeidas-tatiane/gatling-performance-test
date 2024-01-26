@@ -20,10 +20,18 @@ object Crocodiles {
 
   /* ----- REQUESTS ----- */
   def getAllCrocodiles: ChainBuilder = {
-    feed(searchCrocodiles)
       .exec(
         http("Get All Crocodiles -> /public/crocodiles/")
           .get(UrlProperties.getUrlByKey("api") + "/public/crocodiles/")
+          .headers(sentHeadersAll)
+      )
+  }
+
+  def getCrocodilesbyID: ChainBuilder = {
+    feed(searchCrocodiles)
+      .exec(
+        http("Get All Crocodiles -> /public/crocodiles/")
+          .get(UrlProperties.getUrlByKey("api") + "/public/crocodiles/$id")
           .headers(sentHeadersAll)
       )
   }
