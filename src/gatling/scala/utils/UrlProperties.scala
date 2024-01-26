@@ -7,14 +7,15 @@ object UrlProperties {
   private var properties : Properties = null
 
   private val propertiesFile = getClass.getResource("application.properties")
-  if (propertiesFile != null){
-    val source = Source.fromURL(propertiesFile)
-
-    properties = new Properties()
-    properties.load(source.bufferedReader())
-  }
 
   def urls(property: String): String = {
+    if (propertiesFile != null) {
+      val source = Source.fromURL(propertiesFile)
+
+      properties = new Properties()
+      properties.load(source.bufferedReader())
+    }
+
     properties.getProperty(System.getProperty("env") + ".url." + property)
   }
 
