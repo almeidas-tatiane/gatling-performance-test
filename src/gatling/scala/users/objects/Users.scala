@@ -42,7 +42,6 @@ object Users {
   /* ----- REQUESTS ----- */
 
   def createNewUser: ChainBuilder = {
-    feed(usersData)
     .exec(
       http("Create User -> /user/register/")
         .post(UrlProperties.getUrlByKey("api") + "/user/register/")
@@ -53,7 +52,6 @@ object Users {
   }
 
   def login: ChainBuilder = {
-    feed(usersData)
     .exec(
       http("Login -> /auth/token/login/")
         .post(UrlProperties.getUrlByKey("api") + "/auth/token/login/")
