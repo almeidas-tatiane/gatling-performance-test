@@ -4,7 +4,7 @@ import java.util.Properties
 import scala.io.Source
 
 object UrlProperties {
-  private var properties : Properties = _
+  private var properties : Properties = null
 
   private val propertiesFile = getClass.getResource("application.properties")
   if (propertiesFile != null){
@@ -12,9 +12,6 @@ object UrlProperties {
 
     properties = new Properties()
     properties.load(source.bufferedReader())
-  } else {
-    // Handle the case where propertiesFile is null (e.g., log a message or throw an exception)
-    throw new RuntimeException("Failed to load application.properties file.")
   }
 
   def urls(property: String): String = {
