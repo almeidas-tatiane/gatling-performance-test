@@ -22,30 +22,38 @@ object Users {
     "X-Dynatrace-Test" -> "VU=$VU;SI=GATLING;TSN=CREATE USER;LSN=$LSN;LTN=$LTN;PC=$PC"
   )
 
+  /* ----- REQUESTS BODY ----- */
+  val formParamCreateUser = Map(
+    "username" -> "test524",
+    "first_name" -> "Test524",
+    "last_name" -> "Crocodile524",
+    "email" -> "test524.crocodile@test.com",
+    "password" -> "test123"
+  )
+
+  val formParamLogin = Map(
+    "username" -> "test524",
+    "password" -> "test123"
+  )
+
   /* ----- REQUESTS ----- */
 
   def createNewUser: ChainBuilder = {
-//    feed(usersData)
     exec(
       http("Create User -> /user/register/")
         .post(UrlProperties.getUrlByKey("api") + "/user/register/")
         .headers(sentHeadersUsers)
-        .formParam("username", "test524")
-        .formParam("first_name", "Test524")
-        .formParam("last_name", "Crocodile524")
-        .formParam("email", "test524.crocodile@test.com")
-        .formParam("password", "test123")
+        .formParamMap(formParamCreateUser)
+
     )
   }
 
   def login: ChainBuilder = {
-//    feed(usersData)
     exec(
       http("Login -> /auth/token/login/")
         .post(UrlProperties.getUrlByKey("api") + "/auth/token/login/")
         .headers(sentHeadersLogin)
-        .formParam("username", "test524")
-        .formParam("password", "test123")
+        .formParamMap(formParamLogin)
         .check(jsonPath("$.access").saveAs("access_token"))
     )
   }
