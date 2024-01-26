@@ -17,7 +17,7 @@ class CrocodilesSimulation extends Simulation {
   def scnCrocodiles = scenario("Crocodiles")
     .repeat(5) {
       exec(Crocodiles.getAllCrocodiles)
-      exec(Crocodiles.getCrocodilesbyID)
+      .exec(Crocodiles.getCrocodilesbyID)
     }
 
 
