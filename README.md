@@ -12,7 +12,6 @@ In this repository you will find some projects in Gatling developed during my le
 - In the src/gatling/resources/csv/project folder, you'll find csv files used for script parametrization;
 - In the resources folder, you'll find the application.properties file that has all URLs used and it can be multiple environments as: TEST, PROD, DEV etc;
 - In the utils package, you'll find the UrlProperties file, it's used to read the application.properties, with the urlProperties file you can pass the variable environment in the command line during script execution;
-- In the build/reports/gatling/projectSimulations folder, you'll find the HTML report of execution.
 
 
 ### **Steps to execute the simulation**
