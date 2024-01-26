@@ -15,8 +15,10 @@ class CrocodilesSimulation extends Simulation {
   val maxDuration = System.getProperty("maxDuration", "130").toInt.minutes
 
   def scnCrocodiles = scenario("Crocodiles")
-      .exec(Crocodiles.getAllCrocodiles)
-      .exec(Crocodiles.getCrocodilesbyID)
+    .repeat(5) {
+      exec(Crocodiles.getAllCrocodiles)
+      exec(Crocodiles.getCrocodilesbyID)
+    }
 
 
 
