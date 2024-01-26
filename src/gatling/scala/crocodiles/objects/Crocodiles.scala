@@ -16,8 +16,6 @@ object Crocodiles {
   val searchCrocodiles = csv(testDataDir + "crocodiles.csv").circular
   val createCrocodiles = csv(testDataDir + "newcrocodiles.csv").queue
 
-  private val testDataDirUsers = "csv/users/"
-  val usersDataLogin = csv(testDataDirUsers + "users.csv").queue
 
   /* ----- HEADERS ----- */
   val sentHeadersAll = Map(
@@ -31,7 +29,7 @@ object Crocodiles {
   )
 
   val sentHeadersNewCrocodiles = Map(
-    "Authorization" -> s"Basic ${Base64.getEncoder.encodeToString("${username}:${password}".getBytes("UTF-8"))}",
+    "Authorization" -> s"Basic ${Base64.getEncoder.encodeToString("test1210:test123".getBytes("UTF-8"))}",
     "Content-Type" -> "application/json",
     "X-Dynatrace-Test" -> "VU=$VU;SI=GATLING;TSN=NEW-CROCODILES;LSN=$LSN;LTN=$LTN;PC=$PC"
   )
@@ -64,7 +62,7 @@ object Crocodiles {
   }
 
   def createNewCrocodile: ChainBuilder = {
-    feed(createCrocodiles).feed(usersDataLogin)
+    feed(createCrocodiles)
     .exec(Users.login)
     .exec(
         http("Create New Crocodiles -> /my/crocodiles/")
