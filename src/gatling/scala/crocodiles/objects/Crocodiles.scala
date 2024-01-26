@@ -7,6 +7,8 @@ import io.gatling.core.Predef._
 import io.gatling.core.structure.ChainBuilder
 import users.objects.Users
 
+import java.util.Base64
+
 object Crocodiles {
 
   /* ----- TEST DATA ----- */
@@ -26,7 +28,7 @@ object Crocodiles {
   )
 
   val sentHeadersNewCrocodiles = Map(
-    "Authorization" -> "Basic ${access_token}",
+    "Authorization" -> s"Basic ${Base64.getEncoder.encodeToString("test524:test123".getBytes("UTF-8"))}",
     "Content-Type" -> "application/json",
     "X-Dynatrace-Test" -> "VU=$VU;SI=GATLING;TSN=NEW-CROCODILES;LSN=$LSN;LTN=$LTN;PC=$PC"
   )
