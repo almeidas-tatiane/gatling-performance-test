@@ -5,6 +5,7 @@ import io.gatling.http.Predef._
 import utils.UrlProperties
 import io.gatling.core.Predef._
 import io.gatling.core.structure.ChainBuilder
+import users.objects.Users
 
 object Crocodiles {
 
@@ -38,7 +39,7 @@ object Crocodiles {
   }
 
   def getCrocodilesbyID: ChainBuilder = {
-    feed(searchCrocodiles)
+     feed(searchCrocodiles)
       .exec(
         http("Get Crocodiles By ID -> /public/crocodiles/id")
           .get(UrlProperties.getUrlByKey("api") + "/public/crocodiles/${id}")
@@ -48,7 +49,8 @@ object Crocodiles {
 
   def createNewCrocodile: ChainBuilder = {
     feed(createCrocodiles)
-      .exec(
+    .exec(Users.login)
+      exec(
         http("Create New Crocodiles -> /my/crocodiles/")
           .post(UrlProperties.getUrlByKey("api") + "/my/crocodiles/")
           .headers(sentHeadersAll)
