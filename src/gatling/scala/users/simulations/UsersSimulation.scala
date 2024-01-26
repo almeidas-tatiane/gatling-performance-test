@@ -10,15 +10,16 @@ class UsersSimulation extends Simulation{
   val httpConfiguration = http
 
 
-  def scnLogin = scenario("Login")
+  def scnUser = scenario("User")
     .repeat(1) {
-      exec(Users.login)
+      exec(Users.createNewUser)
+      .exec(Users.login)
     }
 
 
 
   /* ----- VALIDATE TEST ----- */
-  setUp(scnLogin.inject(
+  setUp(scnUser.inject(
     atOnceUsers(1))).protocols(httpConfiguration)
 
 
