@@ -42,7 +42,7 @@ object Users {
   /* ----- REQUESTS ----- */
 
   def createNewUser: ChainBuilder = {
-    .exec(
+    exec(
       http("Create User -> /user/register/")
         .post(UrlProperties.getUrlByKey("api") + "/user/register/")
         .headers(sentHeadersUsers)
@@ -52,7 +52,7 @@ object Users {
   }
 
   def login: ChainBuilder = {
-    .exec(
+    exec(
       http("Login -> /auth/token/login/")
         .post(UrlProperties.getUrlByKey("api") + "/auth/token/login/")
         .headers(sentHeadersLogin)
