@@ -20,7 +20,7 @@ object Crocodiles {
 
   /* ----- REQUESTS ----- */
   def getAllCrocodiles: ChainBuilder = {
-      .exec(
+      exec(
         http("Get All Crocodiles -> /public/crocodiles/")
           .get(UrlProperties.getUrlByKey("api") + "/public/crocodiles/")
           .headers(sentHeadersAll)
