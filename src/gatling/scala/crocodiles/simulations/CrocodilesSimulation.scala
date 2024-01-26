@@ -16,18 +16,21 @@ class CrocodilesSimulation extends Simulation {
 
   def scnCrocodiles = scenario("Crocodiles")
     .forever(
-      exec(Crocodiles.getAllCrocodiles))
+      exec(Crocodiles.getAllCrocodiles)
+      exec(Crocodiles.getCrocodilesbyID)
+    )
+
 
   /* ----- VALIDATE TEST ----- */
-//  setUp(scnGetAllCrocodiles.inject(
-//    atOnceUsers(1))).protocols(httpConfiguration)
+  setUp(scnCrocodiles.inject(
+    atOnceUsers(1))).protocols(httpConfiguration)
 
   /* ----- LOAD TEST ----- */
-  setUp(
-    scnCrocodiles.inject(
-      rampUsers(users).during(rampDuration),
-      nothingFor(holdDuration),
-    ).protocols(httpConfiguration)).maxDuration(maxDuration)
+//  setUp(
+//    scnCrocodiles.inject(
+//      rampUsers(users).during(rampDuration),
+//      nothingFor(holdDuration),
+//    ).protocols(httpConfiguration)).maxDuration(maxDuration)
 
 
 }
