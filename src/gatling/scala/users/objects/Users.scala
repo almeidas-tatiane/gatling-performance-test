@@ -28,7 +28,7 @@ object Users {
     |  "username": "test1210",
     |  "first_name": "test1210",
     |  "last_name": "test1210",
-    |  "email": "test1210"@"test1210".com,
+    |  "email": "test1210"@test1210.com",
     |  "password": "test123"
     |  }""".stripMargin
 
