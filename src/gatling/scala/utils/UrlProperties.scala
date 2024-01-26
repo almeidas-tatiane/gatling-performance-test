@@ -9,7 +9,7 @@ object UrlProperties {
 //  private val propertiesFile = getClass.getResource("application.properties")
 
   def urls(property: String): String = {
-    val propertiesFile = getClass.getResource("application.properties")
+    val propertiesFile = getClass.getResource("../../resources/application.properties")
 
     if (propertiesFile != null) {
       val source = Source.fromURL(propertiesFile)
