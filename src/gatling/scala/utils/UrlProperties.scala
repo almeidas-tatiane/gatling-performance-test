@@ -1,24 +1,43 @@
 package utils
 
+import java.io.FileInputStream
+import java.io.IOException
 import java.util.Properties
-import scala.io.Source
+
 
 object UrlProperties {
-  private var properties : Properties = null
+  private var properties: Properties = null
 
-//  private val propertiesFile = getClass.getResource("application.properties")
+  // Function to get URLs
+  def getUrls: Properties = properties
 
-  def urls(property: String): String = {
-    val propertiesFile = getClass.getResource("../../resources/application.properties")
+  // Function to get specific URL by property key
+  def getUrlByKey(property: String): String = {
+    val env = System.getProperty("env", "default") // Use 'default' if 'env' system property is not defined.
 
-    if (propertiesFile != null) {
-      val source = Source.fromURL(propertiesFile)
-
-      properties = new Properties()
-      properties.load(source.bufferedReader())
-    }
-
-    properties.getProperty(System.getProperty("env") + ".url." + property)
+    // Build the property key
+    val key = env + ".url." + property
+    // Getting the property value
+    properties.getProperty(key)
   }
+
+  def main(args: Array[String]): Unit = {
+    // Example usage
+    System.out.println("All URLs: " + getUrls)
+    System.out.println("Specific URL: " + getUrlByKey("api"))
+  }
+
+  try
+    // Load properties from the file
+    try {
+      val input = new FileInputStream("src/gatling/resources/application.properties")
+      try {
+        properties = new Properties
+        properties.load(input)
+      } catch {
+        case e: IOException =>
+          throw new RuntimeException("Failed to load application.properties file.", e)
+      } finally if (input != null) input.close()
+    }
 
 }
