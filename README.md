@@ -2,7 +2,8 @@
 In this repository you will find some projects in Gatling developed during my learning curve.
 
 ### **Gatling Installation**
-- Gatling Documentation: [https://grafana.com/docs/k6/latest/get-started/installation/](https://gatling.io/docs/gatling/tutorials/installation/)
+- Gatling Documentation: https://gatling.io/docs/gatling/tutorials/installation/
+  
 
 ### 📂**Project structure in IntelliJ**
 
