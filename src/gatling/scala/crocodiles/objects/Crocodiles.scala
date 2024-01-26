@@ -22,7 +22,7 @@ object Crocodiles {
 
   /* ----- REQUESTS BODY ----- */
   val createNewCrocodileBody =
-    """{
+    """s{
       |      "name": "${name}" ,
       |      "sex": "${sex}" ,
       |      "date_of_birth": "${date_of_birth}"
