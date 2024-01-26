@@ -61,13 +61,6 @@ object Crocodiles {
   def createNewCrocodile: ChainBuilder = {
     feed(createCrocodiles)
     .exec(Users.login)
-    .exec(session => {
-        session.set("createNewCrocodileBody", createNewCrocodileBody)
-        println(s"Request Body: ${session("createNewCrocodileBody").as[String]}")
-        session.set("sentHeadersNewCrocodiles", sentHeadersNewCrocodiles)
-        println(s"Headers: ${sentHeadersNewCrocodiles}")
-        session
-    })
     .exec(
         http("Create New Crocodiles -> /my/crocodiles/")
           .post(UrlProperties.getUrlByKey("api") + "/my/crocodiles/")
