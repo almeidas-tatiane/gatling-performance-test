@@ -8,8 +8,8 @@ import io.gatling.core.structure.ChainBuilder
 object Users {
 
   /* ----- TEST DATA ----- */
-//  private val testDataDir = "csv/users/"
-//  val usersData = csv(testDataDir + "users.csv").queue
+  private val testDataDir = "csv/users/"
+  val usersData = csv(testDataDir + "users.csv").queue
 
   /* ----- HEADERS ----- */
   val sentHeadersLogin = Map(
@@ -23,18 +23,21 @@ object Users {
   )
 
   /* ----- REQUESTS BODY ----- */
-  val formParamCreateUser = Map(
-    "username" -> "test524",
-    "first_name" -> "Test524",
-    "last_name" -> "Crocodile524",
-    "email" -> "test524.crocodile@test.com",
-    "password" -> "test123"
-  )
+  val createUserBody =
+    """{
+    |  "username" -> "test524",
+    |  "first_name" -> "Test524",
+    |  "last_name" -> "Crocodile524",
+    |  "email" -> "test524.crocodile@test.com",
+    |  "password" -> "test123"
+    |  }""".stripMargin
 
-  val formParamLogin = Map(
-    "username" -> "test524",
-    "password" -> "test123"
-  )
+
+  val loginBody =
+    """{
+      |  "username": "${username}",
+      |  "password": "${password}"
+      |}""".stripMargin
 
   /* ----- REQUESTS ----- */
 
@@ -43,17 +46,18 @@ object Users {
       http("Create User -> /user/register/")
         .post(UrlProperties.getUrlByKey("api") + "/user/register/")
         .headers(sentHeadersUsers)
-        .formParamMap(formParamCreateUser)
+        .body(StringBody(createUserBody)).asJson
 
     )
   }
 
   def login: ChainBuilder = {
-    exec(
+    feed(usersData)
+    .exec(
       http("Login -> /auth/token/login/")
         .post(UrlProperties.getUrlByKey("api") + "/auth/token/login/")
         .headers(sentHeadersLogin)
-        .formParamMap(formParamLogin)
+        .body(StringBody(loginBody)).asJson
         .check(jsonPath("$.access").saveAs("access_token"))
     )
   }
