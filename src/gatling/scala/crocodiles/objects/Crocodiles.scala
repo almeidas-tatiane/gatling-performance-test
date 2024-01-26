@@ -30,7 +30,7 @@ object Crocodiles {
   def getCrocodilesbyID: ChainBuilder = {
     feed(searchCrocodiles)
       .exec(
-        http("Get All Crocodiles -> /public/crocodiles/")
+        http("Get Crocodiles By ID -> /public/crocodiles/id")
           .get(UrlProperties.getUrlByKey("api") + "/public/crocodiles/${id}")
           .headers(sentHeadersAll)
       )
