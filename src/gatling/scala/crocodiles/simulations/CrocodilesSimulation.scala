@@ -18,6 +18,7 @@ class CrocodilesSimulation extends Simulation {
     .repeat(5) {
       exec(Crocodiles.getAllCrocodiles)
       .exec(Crocodiles.getCrocodilesbyID)
+        .exec(Crocodiles.createNewCrocodile)
     }
 
 
