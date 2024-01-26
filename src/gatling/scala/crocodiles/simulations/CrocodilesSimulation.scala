@@ -32,7 +32,7 @@ class CrocodilesSimulation extends Simulation {
       nothingFor(holdDuration),
       rampUsers(users).during(rampDuration),
       nothingFor(holdDuration * 2),
-    ).protocols(httpConfiguration)).maxDuration(maxDuration))
+    ).protocols(httpConfiguration)).maxDuration(maxDuration)
 
 
 }
