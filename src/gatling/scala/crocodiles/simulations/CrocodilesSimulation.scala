@@ -14,7 +14,7 @@ class CrocodilesSimulation extends Simulation {
   val holdDuration = System.getProperty("holdDuration", "10").toInt.minutes
   val maxDuration = System.getProperty("maxDuration", "130").toInt.minutes
 
-  def scnGetAllCrocodiles = scenario("Get All Crocodiles")
+  def scnCrocodiles = scenario("Crocodiles")
     .forever(
       exec(Crocodiles.getAllCrocodiles))
 
@@ -24,7 +24,7 @@ class CrocodilesSimulation extends Simulation {
 
   /* ----- LOAD TEST ----- */
   setUp(
-    scnGetAllCrocodiles.inject(
+    scnCrocodiles.inject(
       rampUsers(users).during(rampDuration),
       nothingFor(holdDuration),
     ).protocols(httpConfiguration)).maxDuration(maxDuration)
