@@ -26,12 +26,6 @@ class CrocodilesSimulation extends Simulation {
     scnGetAllCrocodiles.inject(
       rampUsers(users).during(rampDuration),
       nothingFor(holdDuration),
-      rampUsers(users).during(rampDuration),
-      nothingFor(holdDuration),
-      rampUsers(users).during(rampDuration),
-      nothingFor(holdDuration),
-      rampUsers(users).during(rampDuration),
-      nothingFor(holdDuration * 2),
     ).protocols(httpConfiguration)).maxDuration(maxDuration)
 
 
