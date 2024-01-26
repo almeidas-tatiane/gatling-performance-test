@@ -19,6 +19,15 @@ object Crocodiles {
     "X-Dynatrace-Test" -> "VU=$VU;SI=GATLING;TSN=SEARCH-ALL-CROCODILES;LSN=$LSN;LTN=$LTN;PC=$PC"
   )
 
+  /* ----- REQUESTS BODY ----- */
+  val createNewCrocodileBody =
+    """{
+      |      "name": "${name}" ,
+      |      "sex": "${sex}" ,
+      |      "date_of_birth": "${date_of_birth}"
+      |    }""".stripMargin
+
+
   /* ----- REQUESTS ----- */
   def getAllCrocodiles: ChainBuilder = {
       exec(
@@ -40,9 +49,10 @@ object Crocodiles {
   def createNewCrocodile: ChainBuilder = {
     feed(createCrocodiles)
       .exec(
-        http("Create New Crocodiles -> /public/crocodiles/id")
-          .get(UrlProperties.getUrlByKey("api") + "/public/crocodiles/${id}")
+        http("Create New Crocodiles -> /my/crocodiles/")
+          .post(UrlProperties.getUrlByKey("api") + "/my/crocodiles/")
           .headers(sentHeadersAll)
+          .body(StringBody(createNewCrocodileBody)).asJson
       )
   }
 
