@@ -8,8 +8,8 @@ import io.gatling.core.structure.ChainBuilder
 object Users {
 
   /* ----- TEST DATA ----- */
-  private val testDataDir = "csv/users/"
-  val usersData = csv(testDataDir + "users.csv").queue
+//  private val testDataDir = "csv/users/"
+//  val usersData = csv(testDataDir + "users.csv").queue
 
   /* ----- HEADERS ----- */
   val sentHeadersLogin = Map(
@@ -25,18 +25,18 @@ object Users {
   /* ----- REQUESTS BODY ----- */
   val createUserBody =
     """{
-    |  "username": ${username},
-    |  "first_name": ${first_name},
-    |  "last_name": ${last_name},
-    |  "email": ${email},
-    |  "password": ${password}
+    |  "username": "test1210",
+    |  "first_name": "test1210",
+    |  "last_name": "test1210",
+    |  "email": "test1210"@"test1210".com,
+    |  "password": "test123"
     |  }""".stripMargin
 
 
   val loginBody =
     """{
-      |  "username": ${username},
-      |  "password": ${password}
+      |  "username": "test1210",
+      |  "password": "test123"
       |}""".stripMargin
 
   /* ----- REQUESTS ----- */
