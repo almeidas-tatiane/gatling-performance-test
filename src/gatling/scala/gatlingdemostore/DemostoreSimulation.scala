@@ -79,7 +79,7 @@ class DemostoreSimulation extends Simulation {
     .exec(
       http("request_0")
         .get("/")
-        .check(css("_csrf", "content").saveAs("csrfValue"))
+        .check(css("#_csrf", "content").saveAs("csrfValue"))
         .headers(headers_0)
     )
     .pause(4)
