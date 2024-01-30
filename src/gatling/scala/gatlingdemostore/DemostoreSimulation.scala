@@ -108,7 +108,10 @@ class DemostoreSimulation extends Simulation {
 
   object Checkout {
     def viewCart = {
-      exec(
+      doIf(session => !session("customerLoggedIn").as[Boolean]){
+        exec(Customer.loginPage)
+      }
+      .exec(
         http("View Cart")
           .get("/cart/view")
           .check(status.is(200))
@@ -137,8 +140,6 @@ class DemostoreSimulation extends Simulation {
     .exec(Catalog.Product.addProductToCart)
     .pause(2)
     .exec(Checkout.viewCart)
-    .pause(2)
-    .exec(Customer.loginPage)
     .pause(2)
     .exec(Checkout.completeCheckout)
 
