@@ -90,7 +90,6 @@ class DemostoreSimulation extends Simulation {
             val itemPrice = session("price").as[Double]
             session.set("cartTotal", (currentCartTotal + itemPrice))
             })
-//          .exec { session => println(session); session}
       }
     }
   }
@@ -121,7 +120,7 @@ class DemostoreSimulation extends Simulation {
         http("View Cart")
           .get("/cart/view")
           .check(status.is(200))
-          .check(css("#grandTotal").is("$$${cartTotal}"))
+          .check(css("#grandTotal").is('$'+"${cartTotal}"))
       )
     }
 
@@ -151,7 +150,7 @@ class DemostoreSimulation extends Simulation {
     .exec(Checkout.completeCheckout)
 
 	//VALIDATE THE SCRIPT
-//  setUp(scn.inject(atOnceUsers(1))).protocols(httpProtocol)
+  setUp(scn.inject(atOnceUsers(1))).protocols(httpProtocol)
 
 
 }
