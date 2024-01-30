@@ -15,6 +15,7 @@ class DemostoreSimulation extends Simulation {
 
   val categoryFeeder = csv("csv/gatlingdemostore/categoryDetails.csv").random
   val jsonFeederProducts = jsonFile("json/gatlingdemostore/productDetails.json").random
+  val loginFeeder = csv("csv/gatlingdemostore/loginDetails.csv").circular
 
   object CsmPages {
     def homePage = {
@@ -41,54 +42,70 @@ class DemostoreSimulation extends Simulation {
     object Category {
       def categoriesPage = {
         feed(categoryFeeder)
-        .exec(
-          http("Load Categories Page - ${categoryName}")
-            .get("/category/${categorySlug}")
-            .check(status.is(200))
-            )
+          .exec(
+            http("Load Categories Page - ${categoryName}")
+              .get("/category/${categorySlug}")
+              .check(status.is(200))
+          )
       }
     }
+
+    object Product {
+      def loadProductPage = {
+        feed(jsonFeederProducts)
+          .exec(
+            http("Load Product Page - ${name}")
+              .get("/product/${slug}")
+              .check(status.is(200))
+              .check(css("#ProductDescription").is("${description}"))
+
+          )
+      }
+
+      def addProductToCart = {
+        exec(loadProductPage)
+          .exec(
+            http("Add Product to Cart")
+              .get("/cart/add/${id}")
+              .check(status.is(200))
+              .check(substring("items in your cart"))
+          )
+      }
     }
+  }
 
-
-
-    def loadProductPage = {
-      exec(
-        http("Load Product Page")
-          .get("/product/black-and-red-glasses")
-      )
+  object Customer {
+    def loginPage = {
+      feed(loginFeeder)
+        .exec(
+          http("Login Page")
+            .post("/login")
+            .formParam("_csrf", "${csrfValue}")
+            .formParam("username", "${username}")
+            .formParam("password", "${password}")
+            .check(status.is(200))
+        )
     }
+  }
 
-    def addProductToCart ={
-      exec(
-        http("Add Product to Cart")
-          .get("/cart/add/19")
-      )
-    }
-
+  object Checkout {
     def viewCart = {
       exec(
         http("View Cart")
           .get("/cart/view")
+          .check(status.is(200))
       )
     }
 
-    def loginPage = {
+    def completeCheckout = {
       exec(
-        http("Login Page")
-          .post("/login")
-          .formParam("_csrf", "${csrfValue}")
-          .formParam("username", "admin")
-          .formParam("password", "admin")
-      )
-    }
-
-    def checkout = {
-      exec(
-        http("Checkout")
+        http("Checkout Cart")
           .get("/cart/checkout")
+          .check(status.is(200))
+          .check(substring("Thanks for your order! See you soon!"))
       )
     }
+  }
 
 
   val scn = scenario("DemostoreSimulation")
@@ -98,15 +115,13 @@ class DemostoreSimulation extends Simulation {
     .pause(2)
     .exec(Catalog.Category.categoriesPage)
     .pause(2)
-    .exec(CsmPages.loadProductPage)
+    .exec(Catalog.Product.addProductToCart)
     .pause(2)
-    .exec(CsmPages.addProductToCart)
+    .exec(Checkout.viewCart)
     .pause(2)
-    .exec(CsmPages.viewCart)
+    .exec(Customer.loginPage)
     .pause(2)
-    .exec(CsmPages.loginPage)
-    .pause(2)
-    .exec(CsmPages.checkout)
+    .exec(Checkout.completeCheckout)
 
 	setUp(scn.inject(atOnceUsers(1))).protocols(httpProtocol)
 }
