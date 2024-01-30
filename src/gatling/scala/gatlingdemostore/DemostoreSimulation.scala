@@ -12,7 +12,7 @@ class DemostoreSimulation extends Simulation {
     .baseUrl("https://demostore.gatling.io")
     .inferHtmlResources(AllowList(), DenyList(""".*\.js""", """.*\.css""", """.*\.gif""", """.*\.jpeg""", """.*\.jpg""", """.*\.ico""", """.*\.woff""", """.*\.woff2""", """.*\.(t|o)tf""", """.*\.png""", """.*\.svg""", """.*detectportal\.firefox\.com.*"""))
     .userAgentHeader("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
-  
+
   private val headers_0 = Map(
   		"accept" -> "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
   		"accept-encoding" -> "gzip, deflate, br",
@@ -27,7 +27,7 @@ class DemostoreSimulation extends Simulation {
   		"sec-fetch-user" -> "?1",
   		"upgrade-insecure-requests" -> "1"
   )
-  
+
   private val headers_4 = Map(
   		"accept" -> "*/*",
   		"accept-encoding" -> "gzip, deflate, br",
@@ -41,14 +41,14 @@ class DemostoreSimulation extends Simulation {
   		"sec-fetch-site" -> "same-origin",
   		"x-requested-with" -> "XMLHttpRequest"
   )
-  
+
   private val headers_6 = Map(
   		"Upgrade-Insecure-Requests" -> "1",
   		"sec-ch-ua" -> """Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120""",
   		"sec-ch-ua-mobile" -> "?0",
   		"sec-ch-ua-platform" -> "Windows"
   )
-  
+
   private val headers_7 = Map(
   		"accept" -> "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
   		"accept-encoding" -> "gzip, deflate, br",
@@ -64,7 +64,7 @@ class DemostoreSimulation extends Simulation {
   		"sec-fetch-user" -> "?1",
   		"upgrade-insecure-requests" -> "1"
   )
-  
+
   private val headers_8 = Map(
   		"Content-Type" -> "application/x-www-form-urlencoded",
   		"Origin" -> "https://demostore.gatling.io",
@@ -79,6 +79,7 @@ class DemostoreSimulation extends Simulation {
     .exec(
       http("request_0")
         .get("/")
+        .check(css("_csrf", "content").saveAs("csrfValue"))
         .headers(headers_0)
     )
     .pause(4)
@@ -121,7 +122,7 @@ class DemostoreSimulation extends Simulation {
       http("request_7")
         .post("/login")
         .headers(headers_7)
-        .formParam("_csrf", "8fc9f889-87c3-4a68-8e82-3dec9a9dcd93")
+        .formParam("_csrf", "${csrfValue}")
         .formParam("username", "admin")
         .formParam("password", "admin")
         .resources(
