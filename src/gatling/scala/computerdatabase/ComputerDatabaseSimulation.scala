@@ -23,7 +23,7 @@ class ComputerDatabaseSimulation extends Simulation {
       )
 
   val searchFeeder = csv("csv/computerdatabase/search.csv").random
-  val computerFeeder = csv("csv/computerdatabase/computers.csv").circular
+  val computerFeeder = csv("csv/computerdatabase/computer.csv").circular
 
   val search =
     exec(
