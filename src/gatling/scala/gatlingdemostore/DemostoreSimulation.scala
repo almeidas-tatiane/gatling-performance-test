@@ -30,7 +30,7 @@ class DemostoreSimulation extends Simulation {
     .exec(session => session.set("customerLoggedIn", false))
     .exec(session => session.set("cartTotal", 0.00))
     .exec(addCookie(Cookie("sessionId", randomString(10)).withDomain(domain)))
-    .exec {session => println(session); session}
+    .exec {session => println(session); session} // COMMENT THIS LINE WHEN RUN A REAL SCENARIO FOR LOAD TESTING
 
   object CsmPages {
     def homePage = {
@@ -92,6 +92,7 @@ class DemostoreSimulation extends Simulation {
   object Customer {
     def loginPage = {
       feed(loginFeeder)
+        .exec { session => println(session); session} // COMMENT THIS LINE WHEN RUN A REAL SCENARIO FOR LOAD TESTING, RESULT SHOULD BE CUSTOMERLOGGEDIN = FALSE
         .exec(
           http("Login Page")
             .post("/login")
@@ -100,6 +101,8 @@ class DemostoreSimulation extends Simulation {
             .formParam("password", "${password}")
             .check(status.is(200))
         )
+        .exec(session => session.set("customerLoggedIn", true))
+        .exec { session => println(session); session} // COMMENT THIS LINE WHEN RUN A REAL SCENARIO FOR LOAD TESTING, RESULT SHOULD BE CUSTOMERLOGGEDIN = TRUE
     }
   }
 
