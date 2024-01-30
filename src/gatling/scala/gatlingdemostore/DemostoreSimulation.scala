@@ -120,7 +120,7 @@ class DemostoreSimulation extends Simulation {
         http("View Cart")
           .get("/cart/view")
           .check(status.is(200))
-          .check(css("#grandTotal").is('$'+"${cartTotal}"))
+          .check(css("#grandTotal").is("$$${cartTotal}"))
       )
     }
 
