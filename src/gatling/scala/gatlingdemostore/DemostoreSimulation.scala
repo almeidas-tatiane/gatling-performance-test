@@ -8,145 +8,72 @@ import io.gatling.jdbc.Predef._
 
 class DemostoreSimulation extends Simulation {
 
-  private val httpProtocol = http
-    .baseUrl("https://demostore.gatling.io")
-    .inferHtmlResources(AllowList(), DenyList(""".*\.js""", """.*\.css""", """.*\.gif""", """.*\.jpeg""", """.*\.jpg""", """.*\.ico""", """.*\.woff""", """.*\.woff2""", """.*\.(t|o)tf""", """.*\.png""", """.*\.svg""", """.*detectportal\.firefox\.com.*"""))
-    .userAgentHeader("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+  val domain = "demostore.gatling.io"
 
-  private val headers_0 = Map(
-  		"accept" -> "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-  		"accept-encoding" -> "gzip, deflate, br",
-  		"accept-language" -> "en-US,en;q=0.9,pt-BR;q=0.8,pt;q=0.7",
-  		"pragma" -> "no-cache",
-  		"sec-ch-ua" -> """Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120""",
-  		"sec-ch-ua-mobile" -> "?0",
-  		"sec-ch-ua-platform" -> "Windows",
-  		"sec-fetch-dest" -> "document",
-  		"sec-fetch-mode" -> "navigate",
-  		"sec-fetch-site" -> "same-origin",
-  		"sec-fetch-user" -> "?1",
-  		"upgrade-insecure-requests" -> "1"
-  )
+  val httpProtocol = http
+    .baseUrl("https://" + domain)
 
-  private val headers_4 = Map(
-  		"accept" -> "*/*",
-  		"accept-encoding" -> "gzip, deflate, br",
-  		"accept-language" -> "en-US,en;q=0.9,pt-BR;q=0.8,pt;q=0.7",
-  		"pragma" -> "no-cache",
-  		"sec-ch-ua" -> """Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120""",
-  		"sec-ch-ua-mobile" -> "?0",
-  		"sec-ch-ua-platform" -> "Windows",
-  		"sec-fetch-dest" -> "empty",
-  		"sec-fetch-mode" -> "cors",
-  		"sec-fetch-site" -> "same-origin",
-  		"x-requested-with" -> "XMLHttpRequest"
-  )
-
-  private val headers_6 = Map(
-  		"Upgrade-Insecure-Requests" -> "1",
-  		"sec-ch-ua" -> """Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120""",
-  		"sec-ch-ua-mobile" -> "?0",
-  		"sec-ch-ua-platform" -> "Windows"
-  )
-
-  private val headers_7 = Map(
-  		"accept" -> "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-  		"accept-encoding" -> "gzip, deflate, br",
-  		"accept-language" -> "en-US,en;q=0.9,pt-BR;q=0.8,pt;q=0.7",
-  		"origin" -> "https://demostore.gatling.io",
-  		"pragma" -> "no-cache",
-  		"sec-ch-ua" -> """Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120""",
-  		"sec-ch-ua-mobile" -> "?0",
-  		"sec-ch-ua-platform" -> "Windows",
-  		"sec-fetch-dest" -> "document",
-  		"sec-fetch-mode" -> "navigate",
-  		"sec-fetch-site" -> "same-origin",
-  		"sec-fetch-user" -> "?1",
-  		"upgrade-insecure-requests" -> "1"
-  )
-
-  private val headers_8 = Map(
-  		"Content-Type" -> "application/x-www-form-urlencoded",
-  		"Origin" -> "https://demostore.gatling.io",
-  		"Upgrade-Insecure-Requests" -> "1",
-  		"sec-ch-ua" -> """Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120""",
-  		"sec-ch-ua-mobile" -> "?0",
-  		"sec-ch-ua-platform" -> "Windows"
-  )
-
-
-  private val scn = scenario("DemostoreSimulation")
+  val scn = scenario("DemostoreSimulation")
     .exec(
-      http("request_0")
+      http("Home Page")
         .get("/")
+        .check(regex("<title>Gatling Demo-Store</title>").exists)
         .check(css("#_csrf", "content").saveAs("csrfValue"))
-        .headers(headers_0)
     )
-    .pause(4)
+    .pause(2)
     .exec(
-      http("request_1")
+      http("About Us Page")
         .get("/about-us")
-        .headers(headers_0)
     )
     .pause(2)
     .exec(
-      http("request_2")
+      http("Categories Page")
         .get("/category/all")
-        .headers(headers_0)
     )
     .pause(2)
     .exec(
-      http("request_3")
+      http("Load Product Page")
         .get("/product/black-and-red-glasses")
-        .headers(headers_0)
+     )
+    .pause(2)
+    .exec(
+      http("Add Product to Cart")
+        .get("/cart/add/19")
     )
     .pause(2)
     .exec(
-      http("request_4")
-        .get("/cart/add/19")
-        .headers(headers_4)
-    )
-    .pause(1)
-    .exec(
-      http("request_5")
+      http("View Cart")
         .get("/cart/view")
-        .headers(headers_0)
-        .resources(
-          http("request_6")
-            .get("/login")
-            .headers(headers_6)
-        )
+//         .resources(
+//          http("request_6")
+//            .get("/login")
+//        )
     )
-    .pause(7)
+    .pause(2)
     .exec(
-      http("request_7")
+      http("Login Page")
         .post("/login")
-        .headers(headers_7)
         .formParam("_csrf", "${csrfValue}")
         .formParam("username", "admin")
         .formParam("password", "admin")
-        .resources(
-          http("request_8")
-            .get("/")
-            .headers(headers_8)
-        )
+//        .resources(
+//          http("request_8")
+//            .get("/")
+//        )
     )
-    .pause(6)
+//    .pause(6)
+//    .exec(
+//      http("request_9")
+//        .get("/cart/view")
+//    )
+    .pause(2)
     .exec(
-      http("request_9")
-        .get("/cart/view")
-        .headers(headers_0)
-    )
-    .pause(5)
-    .exec(
-      http("request_10")
+      http("Checkout")
         .get("/cart/checkout")
-        .headers(headers_0)
-        .resources(
-          http("request_11")
-            .get("/cart/checkoutConfirmation")
-            .headers(headers_6)
-        )
+//        .resources(
+//          http("request_11")
+//            .get("/cart/checkoutConfirmation")
+//        )
     )
 
 	setUp(scn.inject(atOnceUsers(1))).protocols(httpProtocol)
