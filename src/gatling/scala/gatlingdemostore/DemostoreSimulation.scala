@@ -13,6 +13,9 @@ class DemostoreSimulation extends Simulation {
   val httpProtocol = http
     .baseUrl("https://" + domain)
 
+  val categoryFeeder = csv("csv/gatlingdemostore/categoryDetails.csv").random
+  val jsonFeederProducts = jsonFile("json/gatlingdemostore/productDetails.json").random
+
   object CsmPages {
     def homePage = {
       exec(
@@ -32,13 +35,22 @@ class DemostoreSimulation extends Simulation {
           .check(substring("About Us"))
       )
     }
+  }
 
-    def categoriesPage = {
-      exec(
-        http("Categories Page")
-          .get("/category/all")
-      )
+  object Catalog {
+    object Category {
+      def categoriesPage = {
+        feed(categoryFeeder)
+        .exec(
+          http("Load Categories Page - ${categoryName}")
+            .get("/category/${categorySlug}")
+            .check(status.is(200))
+            )
+      }
     }
+    }
+
+
 
     def loadProductPage = {
       exec(
@@ -77,14 +89,14 @@ class DemostoreSimulation extends Simulation {
           .get("/cart/checkout")
       )
     }
-  }
+
 
   val scn = scenario("DemostoreSimulation")
     .exec(CsmPages.homePage)
     .pause(2)
     .exec(CsmPages.aboutUs)
     .pause(2)
-    .exec(CsmPages.categoriesPage)
+    .exec(Catalog.Category.categoriesPage)
     .pause(2)
     .exec(CsmPages.loadProductPage)
     .pause(2)
