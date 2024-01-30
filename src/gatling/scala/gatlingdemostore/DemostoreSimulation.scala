@@ -44,10 +44,6 @@ class DemostoreSimulation extends Simulation {
     .exec(
       http("View Cart")
         .get("/cart/view")
-//         .resources(
-//          http("request_6")
-//            .get("/login")
-//        )
     )
     .pause(2)
     .exec(
@@ -56,24 +52,11 @@ class DemostoreSimulation extends Simulation {
         .formParam("_csrf", "${csrfValue}")
         .formParam("username", "admin")
         .formParam("password", "admin")
-//        .resources(
-//          http("request_8")
-//            .get("/")
-//        )
     )
-//    .pause(6)
-//    .exec(
-//      http("request_9")
-//        .get("/cart/view")
-//    )
     .pause(2)
     .exec(
       http("Checkout")
         .get("/cart/checkout")
-//        .resources(
-//          http("request_11")
-//            .get("/cart/checkoutConfirmation")
-//        )
     )
 
 	setUp(scn.inject(atOnceUsers(1))).protocols(httpProtocol)
