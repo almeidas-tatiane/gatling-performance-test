@@ -150,5 +150,8 @@ class DemostoreSimulation extends Simulation {
     .pause(2)
     .exec(Checkout.completeCheckout)
 
-	setUp(scn.inject(atOnceUsers(1))).protocols(httpProtocol)
+	//VALIDATE THE SCRIPT
+//  setUp(scn.inject(atOnceUsers(1))).protocols(httpProtocol)
+
+
 }
