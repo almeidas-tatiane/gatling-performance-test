@@ -13,7 +13,17 @@ import java.util.concurrent.ThreadLocalRandom
  */
 class ComputerDatabaseSimulation extends Simulation {
 
-  val feeder = csv("search.csv").random
+  val httpProtocol =
+    http.baseUrl("https://computer-database.gatling.io")
+      .acceptHeader("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
+      .acceptLanguageHeader("en-US,en;q=0.5")
+      .acceptEncodingHeader("gzip, deflate")
+      .userAgentHeader(
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/119.0"
+      )
+
+  val searchFeeder = csv("csv/computerdatabase/search.csv").random
+  val computerFeeder = csv("data/computers.csv").circular
 
   val search =
     exec(
@@ -21,7 +31,7 @@ class ComputerDatabaseSimulation extends Simulation {
         .get("/")
     )
       .pause(1)
-      .feed(feeder)
+      .feed(searchFeeder)
       .exec(
         http("Search")
           .get("/computers?f=#{searchCriterion}")
@@ -58,13 +68,14 @@ class ComputerDatabaseSimulation extends Simulation {
           .get("/computers/new")
       )
         .pause(1)
+        .feed(computerFeeder)
         .exec(
           http("Post")
             .post("/computers")
-            .formParam("name", "Beautiful Computer")
-            .formParam("introduced", "2012-05-30")
-            .formParam("discontinued", "")
-            .formParam("company", "37")
+            .formParam("name", "${computerName}")
+            .formParam("introduced", "${introduced}")
+            .formParam("discontinued", "${discontinued}")
+            .formParam("company", "${companyId}")
             .check(
               status.is { session =>
                 // we do a check on a condition that's been customized with
@@ -78,20 +89,18 @@ class ComputerDatabaseSimulation extends Simulation {
       // if the chain didn't finally succeed, have the user exit the whole scenario
       .exitHereIfFailed
 
-  val httpProtocol =
-    http.baseUrl("https://computer-database.gatling.io")
-      .acceptHeader("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8")
-      .acceptLanguageHeader("en-US,en;q=0.5")
-      .acceptEncodingHeader("gzip, deflate")
-      .userAgentHeader(
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/119.0"
-      )
+
 
   val users = scenario("Users").exec(search, browse)
   val admins = scenario("Admins").exec(search, browse, edit)
 
-  setUp(
-    users.inject(rampUsers(10).during(10)),
-    admins.inject(rampUsers(2).during(10))
-  ).protocols(httpProtocol)
+  setUp(admins.inject(atOnceUsers(5)),
+    users.inject(
+      nothingFor(5), // OPEN MODEL
+      atOnceUsers(1),
+      rampUsers(5) during (10),
+      constantUsersPerSec(20) during (20)
+    ))
+
+    .protocols(httpProtocol)
 }
