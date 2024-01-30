@@ -30,7 +30,7 @@ class DemostoreSimulation extends Simulation {
     .exec(session => session.set("customerLoggedIn", false))
     .exec(session => session.set("cartTotal", 0.00))
     .exec(addCookie(Cookie("sessionId", randomString(10)).withDomain(domain)))
-    .exec {session => println(session); session} // COMMENT THIS LINE WHEN RUN A REAL SCENARIO FOR LOAD TESTING
+//    .exec {session => println(session); session} // COMMENT THIS LINE WHEN RUN A REAL SCENARIO FOR LOAD TESTING
 
   object CsmPages {
     def homePage = {
@@ -90,7 +90,7 @@ class DemostoreSimulation extends Simulation {
             val itemPrice = session("price").as[Double]
             session.set("cartTotal", (currentCartTotal + itemPrice))
             })
-          .exec { session => println(session); session}
+//          .exec { session => println(session); session}
       }
     }
   }
@@ -108,7 +108,7 @@ class DemostoreSimulation extends Simulation {
             .check(status.is(200))
         )
         .exec(session => session.set("customerLoggedIn", true))
-        .exec { session => println(session); session} // COMMENT THIS LINE WHEN RUN A REAL SCENARIO FOR LOAD TESTING, RESULT SHOULD BE CUSTOMERLOGGEDIN = TRUE
+//        .exec { session => println(session); session} // COMMENT THIS LINE WHEN RUN A REAL SCENARIO FOR LOAD TESTING, RESULT SHOULD BE CUSTOMERLOGGEDIN = TRUE
     }
   }
 
