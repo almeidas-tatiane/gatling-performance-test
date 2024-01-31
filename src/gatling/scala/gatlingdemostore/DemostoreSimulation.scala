@@ -150,7 +150,18 @@ class DemostoreSimulation extends Simulation {
     .exec(Checkout.completeCheckout)
 
 	//VALIDATE THE SCRIPT
-  setUp(scn.inject(atOnceUsers(1))).protocols(httpProtocol)
+//  setUp(scn.inject(atOnceUsers(1))).protocols(httpProtocol)
+
+  //OPEN MODEL = where you control the arrival rate of users
+  setUp(
+    scn.inject(
+      atOnceUsers(3),
+      nothingFor(5.seconds),
+      rampUsers(10) during (20.seconds),
+      nothingFor(10.seconds),
+      constantUsersPerSec(1) during(20.seconds)
+    ).protocols(httpProtocol)
+  )
 
 
 }
