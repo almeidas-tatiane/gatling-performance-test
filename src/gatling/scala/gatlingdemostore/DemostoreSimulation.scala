@@ -271,12 +271,19 @@ class DemostoreSimulation extends Simulation {
 //    )
 //  ).protocols(httpProtocol)
 
-  //SETUP TO EXECUTE SEQUENTIAL SCENARIOS
+  //SETUP TO EXECUTE SEQUENTIAL SCENARIOS -> the key word is .andThen
   setUp(
     Scenarios.default
-      .inject(rampUsers(userCount) during (rampDuration.seconds)).protocols(httpProtocol),
-    Scenarios.highPurchase
-      .inject(rampUsers(5) during (10.seconds)).protocols(httpProtocol)
+      .inject(rampUsers(userCount) during (rampDuration.seconds)).protocols(httpProtocol)
+      .andThen(Scenarios.highPurchase.inject(rampUsers(5) during (10.seconds)).protocols(httpProtocol))
   )
+
+  //SETUP TO EXECUTE PARALLEL SCENARIOS -> in this case we removed the .andThen
+//  setUp(
+//    Scenarios.default
+//      .inject(rampUsers(userCount) during (rampDuration.seconds)).protocols(httpProtocol),
+//    Scenarios.highPurchase
+//      .inject(rampUsers(5) during (10.seconds)).protocols(httpProtocol)
+//  )
 
 }
