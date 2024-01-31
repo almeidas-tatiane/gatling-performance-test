@@ -33,7 +33,6 @@ class DemostoreSimulation extends Simulation {
   val rnd = new Random()
 
 
-
   def randomString(lenght: Int): String = {
     rnd.alphanumeric.filter(_.isLetter).take(lenght).mkString
   }
@@ -45,7 +44,7 @@ class DemostoreSimulation extends Simulation {
   }
 
   after {
-    println("Test complete")
+    println("Test Completed")
   }
 
   val initSession = exec(flushCookieJar)
