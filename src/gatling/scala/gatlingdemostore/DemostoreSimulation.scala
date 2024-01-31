@@ -6,6 +6,7 @@ import io.gatling.http.Predef._
 import io.gatling.jdbc.Predef._
 import sun.security.util.Length
 
+import scala.language.postfixOps
 import scala.util.Random
 
 class DemostoreSimulation extends Simulation {
@@ -14,6 +15,17 @@ class DemostoreSimulation extends Simulation {
 
   val httpProtocol = http
     .baseUrl("https://" + domain)
+
+  def userCount: Int = getProperty("USERS", "5").toInt
+  def rampDuration: Int = getProperty("RAMP_DURATION", "10").toInt
+  def testDuration: Int = getProperty("DURATION", "60").toInt
+
+
+  private def getProperty(propertyName: String, defaultValue: String) = {
+    Option(System.getenv(propertyName))
+      .orElse(Option(System.getProperty(propertyName)))
+      .getOrElse(defaultValue)
+  }
 
   val categoryFeeder = csv("csv/gatlingdemostore/categoryDetails.csv").random
   val jsonFeederProducts = jsonFile("json/gatlingdemostore/productDetails.json").random
@@ -149,6 +161,70 @@ class DemostoreSimulation extends Simulation {
     .pause(2)
     .exec(Checkout.completeCheckout)
 
+  //USER JOURNEYS
+  object UserJourneys {
+    def minPause = 100 milliseconds
+      def maxPause = 500 milliseconds
+
+    def browseStore = {
+      exec(initSession)
+      .exec(CsmPages.homePage)
+        .pause(maxPause)
+        .exec(CsmPages.aboutUs)
+        .pause(minPause, maxPause)
+        .repeat(5){
+          exec(Catalog.Category.categoriesPage)
+            .pause(minPause, maxPause)
+            .exec(Catalog.Product.loadProductPage)
+        }
+    }
+    def abandonCard = {
+      exec(initSession)
+        .exec(CsmPages.homePage)
+        .pause(maxPause)
+        .exec(Catalog.Category.categoriesPage)
+        .pause(minPause, maxPause)
+        .exec(Catalog.Product.loadProductPage)
+        .pause(minPause, maxPause)
+        .exec(Catalog.Product.addProductToCart)
+    }
+
+    def completePurchase = {
+      exec(initSession)
+        .exec(CsmPages.homePage)
+        .pause(maxPause)
+        .exec(Catalog.Category.categoriesPage)
+        .pause(minPause, maxPause)
+        .exec(Catalog.Product.loadProductPage)
+        .pause(minPause, maxPause)
+        .exec(Catalog.Product.addProductToCart)
+        .pause(minPause, maxPause)
+        .exec(Checkout.viewCart)
+        .pause(minPause, maxPause)
+        .exec(Checkout.completeCheckout)
+
+    }
+  }
+
+  object Scenarios {
+    def default = scenario ("Default Load Test")
+      .during(testDuration seconds){
+        randomSwitch(
+          75d -> exec(UserJourneys.browseStore),
+          15d -> exec(UserJourneys.abandonCard),
+          10d -> exec(UserJourneys.completePurchase)
+        )
+      }
+    def highPurchase = scenario("High Purchase Load Test")
+      .during(testDuration seconds){
+        randomSwitch(
+          25d -> exec(UserJourneys.browseStore),
+          25d -> exec(UserJourneys.abandonCard),
+          50d -> exec(UserJourneys.completePurchase)
+        )
+      }
+  }
+
 	//VALIDATE THE SCRIPT
 //  setUp(scn.inject(atOnceUsers(1))).protocols(httpProtocol)
 
@@ -177,16 +253,22 @@ class DemostoreSimulation extends Simulation {
 //1. It only throttles to the upper RPS limits.
 //2. Throttled traffic goes into a queue, be aware of the increase of memory it might cause.
 //3.Not balanced by request type, for example if you have 10 transactions and want to run 10% of each of them, throttling may not do it correctly.
-    setUp(
-      scn.inject(
-        constantUsersPerSec(1) during(3.minutes)
-      )
-    ).protocols(httpProtocol).throttle(
-      reachRps(10) in (30.seconds),
-      holdFor(60.seconds),
-      jumpToRps(20),
-      holdFor(60.seconds)
-    ).maxDuration(3.minutes)
+//    setUp(
+//      scn.inject(
+//        constantUsersPerSec(1) during(3.minutes)
+//      )
+//    ).protocols(httpProtocol).throttle(
+//      reachRps(10) in (30.seconds),
+//      holdFor(60.seconds),
+//      jumpToRps(20),
+//      holdFor(60.seconds)
+//    ).maxDuration(3.minutes)
 
+  //SETUP TO BE USED WITH USER JOURNEY
+  setUp(
+    Scenarios.default.inject(
+      rampUsers(userCount) during (rampDuration seconds)
+    )
+  ).protocols(httpProtocol)
 
 }
