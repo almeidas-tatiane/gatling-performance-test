@@ -7,7 +7,7 @@ In this repository you will find some projects in Gatling developed during my le
 
 ### 📂**Project structure in IntelliJ with Gradle**
 
-- In the package crocodiles, you can check an example what I applied what I've learned on my carreer.
+- In the package crocodiles, you can check an example what I applied what I've learned on my career.
   
 - In the src/gatling/scala/project package, you'll find the objects and simulations;
 - In the src/gatling/scala/project/objects package, you'll find the project class with methods that will be called in the simulations;
