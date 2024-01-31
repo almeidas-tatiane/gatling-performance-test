@@ -38,6 +38,16 @@ class DemostoreSimulation extends Simulation {
     rnd.alphanumeric.filter(_.isLetter).take(lenght).mkString
   }
 
+  before {
+    println(s"Running test with ${userCount} users")
+    println(s"Ramping users over ${rampDuration} seconds")
+    println(s"Total test duration ${testDuration} seconds")
+  }
+
+  after {
+    println("Test complete")
+  }
+
   val initSession = exec(flushCookieJar)
     .exec(session => session.set("randomNumber", rnd.nextInt))
     .exec(session => session.set("customerLoggedIn", false))
