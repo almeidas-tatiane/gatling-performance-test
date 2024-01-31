@@ -152,16 +152,22 @@ class DemostoreSimulation extends Simulation {
 	//VALIDATE THE SCRIPT
 //  setUp(scn.inject(atOnceUsers(1))).protocols(httpProtocol)
 
-  //OPEN MODEL = where you control the arrival rate of users
+  //OPEN MODEL = where you control the arrival rate of users. Example: WebPages in general
+//  setUp(
+//    scn.inject(
+//      atOnceUsers(3),
+//      nothingFor(5.seconds),
+//      rampUsers(10) during (20.seconds),
+//      nothingFor(10.seconds),
+//      constantUsersPerSec(1) during(20.seconds)
+//    ).protocols(httpProtocol)
+//  )
+
+  //CLOSE MODEL = where you control the concurrent number of users. Example: Call Centers
   setUp(
     scn.inject(
-      atOnceUsers(3),
-      nothingFor(5.seconds),
-      rampUsers(10) during (20.seconds),
-      nothingFor(10.seconds),
-      constantUsersPerSec(1) during(20.seconds)
-    ).protocols(httpProtocol)
-  )
-
-
-}
+      constantConcurrentUsers(10) during (20.seconds),
+      rampConcurrentUsers(10) to (20) during (20.seconds)
+    )
+  ).protocols(httpProtocol)
+  }
