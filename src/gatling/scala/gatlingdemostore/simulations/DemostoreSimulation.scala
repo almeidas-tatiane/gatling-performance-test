@@ -1,11 +1,13 @@
-package gatlingdemostore
+package gatlingdemostore.simulations
 
-import scala.concurrent.duration._
+import gatlingdemostore.objects.CsmPages
+import gatlingdemostore.objects.Catalog
+import gatlingdemostore.objects.Checkout
+
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-import io.gatling.jdbc.Predef._
-import sun.security.util.Length
 
+import scala.concurrent.duration._
 import scala.language.postfixOps
 import scala.util.Random
 
@@ -27,11 +29,10 @@ class DemostoreSimulation extends Simulation {
       .getOrElse(defaultValue)
   }
 
-  val categoryFeeder = csv("csv/gatlingdemostore/categoryDetails.csv").random
-  val jsonFeederProducts = jsonFile("json/gatlingdemostore/productDetails.json").random
-  val loginFeeder = csv("csv/gatlingdemostore/loginDetails.csv").circular
 
   val rnd = new Random()
+
+
 
   def randomString(lenght: Int): String = {
     rnd.alphanumeric.filter(_.isLetter).take(lenght).mkString
@@ -43,108 +44,6 @@ class DemostoreSimulation extends Simulation {
     .exec(session => session.set("cartTotal", 0.00))
     .exec(addCookie(Cookie("sessionId", randomString(10)).withDomain(domain)))
 //    .exec {session => println(session); session} // COMMENT THIS LINE WHEN RUN A REAL SCENARIO FOR LOAD TESTING
-
-  object CsmPages {
-    def homePage = {
-      exec(
-        http("Home Page")
-          .get("/")
-          .check(status.is(200))
-          .check(regex("<title>Gatling Demo-Store</title>").exists)
-          .check(css("#_csrf", "content").saveAs("csrfValue"))
-      )
-    }
-
-    def aboutUs = {
-      exec(
-        http("About Us Page")
-          .get("/about-us")
-          .check(status.is(200))
-          .check(substring("About Us"))
-      )
-    }
-  }
-
-  object Catalog {
-    object Category {
-      def categoriesPage = {
-        feed(categoryFeeder)
-          .exec(
-            http("Load Categories Page - ${categoryName}")
-              .get("/category/${categorySlug}")
-              .check(status.is(200))
-          )
-      }
-    }
-
-    object Product {
-      def loadProductPage = {
-        feed(jsonFeederProducts)
-          .exec(
-            http("Load Product Page - ${name}")
-              .get("/product/${slug}")
-              .check(status.is(200))
-              .check(css("#ProductDescription").is("${description}"))
-
-          )
-      }
-
-      def addProductToCart = {
-        exec(loadProductPage)
-          .exec(
-            http("Add Product to Cart")
-              .get("/cart/add/${id}")
-              .check(status.is(200))
-              .check(substring("items in your cart"))
-          )
-          .exec(session => {
-            val currentCartTotal = session("cartTotal").as[Double]
-            val itemPrice = session("price").as[Double]
-            session.set("cartTotal", (currentCartTotal + itemPrice))
-            })
-      }
-    }
-  }
-
-  object Customer {
-    def loginPage = {
-      feed(loginFeeder)
-        .exec { session => println(session); session} // COMMENT THIS LINE WHEN RUN A REAL SCENARIO FOR LOAD TESTING, RESULT SHOULD BE CUSTOMERLOGGEDIN = FALSE
-        .exec(
-          http("Login Page")
-            .post("/login")
-            .formParam("_csrf", "${csrfValue}")
-            .formParam("username", "${username}")
-            .formParam("password", "${password}")
-            .check(status.is(200))
-        )
-        .exec(session => session.set("customerLoggedIn", true))
-//        .exec { session => println(session); session} // COMMENT THIS LINE WHEN RUN A REAL SCENARIO FOR LOAD TESTING, RESULT SHOULD BE CUSTOMERLOGGEDIN = TRUE
-    }
-  }
-
-  object Checkout {
-    def viewCart = {
-      doIf(session => !session("customerLoggedIn").as[Boolean]){
-        exec(Customer.loginPage)
-      }
-      .exec(
-        http("View Cart")
-          .get("/cart/view")
-          .check(status.is(200))
-//          .check(css("grandTotal").is("$$${cartTotal}"))
-      )
-    }
-
-    def completeCheckout = {
-      exec(
-        http("Checkout Cart")
-          .get("/cart/checkout")
-          .check(status.is(200))
-          .check(substring("Thanks for your order! See you soon!"))
-      )
-    }
-  }
 
 
   val scn = scenario("DemostoreSimulation")
@@ -272,18 +171,18 @@ class DemostoreSimulation extends Simulation {
 //  ).protocols(httpProtocol)
 
   //SETUP TO EXECUTE SEQUENTIAL SCENARIOS -> the key word is .andThen
-  setUp(
-    Scenarios.default
-      .inject(rampUsers(userCount) during (rampDuration.seconds)).protocols(httpProtocol)
-      .andThen(Scenarios.highPurchase.inject(rampUsers(5) during (10.seconds)).protocols(httpProtocol))
-  )
-
-  //SETUP TO EXECUTE PARALLEL SCENARIOS -> in this case we removed the .andThen
 //  setUp(
 //    Scenarios.default
-//      .inject(rampUsers(userCount) during (rampDuration.seconds)).protocols(httpProtocol),
-//    Scenarios.highPurchase
-//      .inject(rampUsers(5) during (10.seconds)).protocols(httpProtocol)
+//      .inject(rampUsers(userCount) during (rampDuration.seconds)).protocols(httpProtocol)
+//      .andThen(Scenarios.highPurchase.inject(rampUsers(5) during (10.seconds)).protocols(httpProtocol))
 //  )
+
+  //SETUP TO EXECUTE PARALLEL SCENARIOS -> in this case we removed the .andThen
+  setUp(
+    Scenarios.default
+      .inject(rampUsers(userCount) during (rampDuration.seconds)).protocols(httpProtocol),
+    Scenarios.highPurchase
+      .inject(rampUsers(5) during (10.seconds)).protocols(httpProtocol)
+  )
 
 }
