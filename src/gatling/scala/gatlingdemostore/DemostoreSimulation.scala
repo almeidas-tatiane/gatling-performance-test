@@ -163,11 +163,30 @@ class DemostoreSimulation extends Simulation {
 //    ).protocols(httpProtocol)
 //  )
 
-  //CLOSE MODEL = where you control the concurrent number of users. Example: Call Centers
-  setUp(
-    scn.inject(
-      constantConcurrentUsers(10) during (20.seconds),
-      rampConcurrentUsers(10) to (20) during (20.seconds)
-    )
-  ).protocols(httpProtocol)
-  }
+  //CLOSED MODEL = where you control the concurrent number of users. Example: Call Centers
+//  setUp(
+//    scn.inject(
+//      constantConcurrentUsers(10) during (20.seconds),
+//      rampConcurrentUsers(10) to (20) during (20.seconds)
+//    )
+//  ).protocols(httpProtocol)
+
+
+//THROTTLING = used when you need to implement a test in terms of request per second and not in terms of concurrent users, similar to Throughput Shaping Timer in JMeter
+//Throttling Key Points
+//1. It only throttles to the upper RPS limits.
+//2. Throttled traffic goes into a queue, be aware of the increase of memory it might cause.
+//3.Not balanced by request type, for example if you have 10 transactions and want to run 10% of each of them, throttling may not do it correctly.
+    setUp(
+      scn.inject(
+        constantUsersPerSec(1) during(3.minutes)
+      )
+    ).protocols(httpProtocol).throttle(
+      reachRps(10) in (30.seconds),
+      holdFor(60.seconds),
+      jumpToRps(20),
+      holdFor(60.seconds)
+    ).maxDuration(3.minutes)
+
+
+}
