@@ -19,12 +19,11 @@ In this repository you will find some projects in Gatling developed during my le
 - The package gatlingdemostore, it's regarding the Gatling Academy training.
 
 
-### **Steps to execute the simulation**
-- To execute the Crocodiles package follow the steps bellow:
+### **Steps to execute the CrococodilesSimulation**
 - In your terminal, type: .\gradlew gatlingRun-crocodiles.simulations.CrocodilesSimulation -Denv=test
 - Press ENTER key;
 - The value test used in the command line came from application.properties file, from the struture **test**.url.api
 
-- To execute gatlingdemostore from Gatling Academy training; follow the steps bellow:
+### **Steps to execute the DemostoreSimulation**
 - In your terminal, type: .\gradlew gatlingRun-gatlingdemostore.simulations.DemostoreSimulation
 - Press ENTER key;
