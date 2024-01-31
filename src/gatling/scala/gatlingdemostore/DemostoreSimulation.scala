@@ -265,10 +265,18 @@ class DemostoreSimulation extends Simulation {
 //    ).maxDuration(3.minutes)
 
   //SETUP TO BE USED WITH USER JOURNEY
+//  setUp(
+//    Scenarios.default.inject(
+//      rampUsers(userCount) during (rampDuration seconds)
+//    )
+//  ).protocols(httpProtocol)
+
+  //SETUP TO EXECUTE SEQUENTIAL SCENARIOS
   setUp(
-    Scenarios.default.inject(
-      rampUsers(userCount) during (rampDuration seconds)
-    )
-  ).protocols(httpProtocol)
+    Scenarios.default
+      .inject(rampUsers(userCount) during (rampDuration.seconds)).protocols(httpProtocol),
+    Scenarios.highPurchase
+      .inject(rampUsers(5) during (10.seconds)).protocols(httpProtocol)
+  )
 
 }
