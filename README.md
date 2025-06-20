@@ -27,3 +27,6 @@ In this repository you will find some projects in Gatling developed during my le
 ### **Steps to execute the DemostoreSimulation**
 - In your terminal, type: .\gradlew gatlingRun-gatlingdemostore.simulations.DemostoreSimulation
 - Press ENTER key;
+
+## 🙏 Usage and Credit Notice
+To help strengthen our community, I would appreciate it if you could mention my [GitHub](https://github.com/almeidas-tatiane) and [LinkedIn](https://www.linkedin.com/in/tatianealmeida/) when using this material.
